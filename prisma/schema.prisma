@@ -1,0 +1,1376 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model ACOES {
+  COD_ACAO  Int    @id(clustered: false, map: "PK_ACOES") @default(autoincrement())
+  NOME_ACAO String @db.VarChar(30)
+}
+
+model APP {
+  COD_APP    Int    @id(map: "PK_APP") @default(autoincrement())
+  NOME_APP   String @db.VarChar(50)
+  QTD_CAMPOS Int
+}
+
+model APP_CAMPO {
+  COD_APP     Int
+  COD_CAMPO   Int
+  OBRIGATORIO Int
+  FIXO        Int
+  MASCARA     String? @db.VarChar(10)
+  COD_SEQ     Int
+
+  @@id([COD_APP, COD_CAMPO], map: "PK_APP_CAMPO", clustered: false)
+}
+
+model CACHE {
+  CACHE_ID      Int     @id(map: "PK_CACHE")
+  CAMINHO_CACHE String? @db.VarChar(80)
+  ESTADO_CACHE  Int?
+  APLIC_ID      Int?
+  USUARIO       String? @db.VarChar(100)
+  SENHA         String? @db.VarChar(100)
+  TIPO_PROT     Int
+
+  @@index([APLIC_ID], map: "APLIC_ID")
+  @@index([CAMINHO_CACHE], map: "CAMINHO_CACHE")
+}
+
+model CACHE_CD {
+  CACHE_ID         Int
+  CACHE_CD         Int
+  TAMANHO_TOTAL    Decimal? @db.Decimal(18, 0)
+  ESPACO_UTILIZADO Decimal? @db.Decimal(18, 0)
+  QTD_IMAGEM       Int?
+  ESTADO_CD        Int
+
+  @@id([CACHE_ID, CACHE_CD], map: "PK_CACHE_CD", clustered: false)
+}
+
+model CACHE_ESTADO {
+  ESTADO_ID Int     @id(map: "PK_CACHE_ESTADO") @unique(map: "ESTADO_ID")
+  DESCRICAO String? @db.VarChar(20)
+}
+
+model CAMPO {
+  COD_CAMPO  Int    @id(map: "PK_CAMPO") @default(autoincrement())
+  TAMANHO    Int
+  NOME_CAMPO String @db.VarChar(50)
+  TIPO       Int
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model EMPRESA {
+  COD_EMP  Int
+  NOME     String  @db.VarChar(50)
+  DT_ATUAL String  @db.VarChar(12)
+  NUM_ID   String  @db.VarChar(20)
+  VERSAO   String? @db.VarChar(20)
+  SERVIDOR String? @db.VarChar(30)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model FDI_DADOS {
+  COD_APLIC        Int
+  NOME_CD          String  @db.VarChar(50)
+  NUM_CD           Int
+  COD_SEC_FRAMEWRK String? @db.VarChar(20)
+
+  @@ignore
+}
+
+model PERFIL {
+  COD_PERFIL Int       @id(map: "PK_PERFIL") @default(autoincrement())
+  DESCRIPCAO String    @db.VarChar(50)
+  DTEXPIRA   DateTime? @db.DateTime
+}
+
+model PERFIL_APLICACAO {
+  COD_PERFIL Int
+  COD_APP    Int
+  COD_ACAO   Int
+
+  @@id([COD_PERFIL, COD_APP, COD_ACAO], map: "PK_PERFIL_APLICACAO", clustered: false)
+}
+
+model SEQUENCES {
+  SEQ         String @db.VarChar(100)
+  NUM_CD      Int
+  SEQUENCE_ID Int?
+
+  @@id([SEQ, NUM_CD], map: "PK_SEQUENCES", clustered: false)
+}
+
+model TAB_004 {
+  COD_TAB_004 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(155)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_004, CACHE_CD], map: "PK_TAB_004", clustered: false)
+}
+
+model TAB_005 {
+  COD_TAB_005 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(10)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_005, CACHE_CD], map: "PK_TAB_005", clustered: false)
+}
+
+model TAB_009 {
+  COD_TAB_009 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(100)
+  CAMPO_4     String? @db.VarChar(10)
+  CAMPO_5     String? @db.VarChar(3)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_009, CACHE_CD], map: "PK_TAB_009", clustered: false)
+}
+
+model TAB_010 {
+  COD_TAB_010 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(10)
+  CAMPO_3     String? @db.VarChar(100)
+  CAMPO_4     String? @db.VarChar(255)
+  CAMPO_5     String? @db.VarChar(4)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(3)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_010, CACHE_CD], map: "PK_TAB_010", clustered: false)
+}
+
+model TAB_011 {
+  COD_TAB_011 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(20)
+  CAMPO_3     String? @db.VarChar(10)
+  CAMPO_4     String? @db.VarChar(10)
+  CAMPO_5     String? @db.VarChar(3)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_011, CACHE_CD], map: "PK_TAB_011", clustered: false)
+}
+
+model TAB_012 {
+  COD_TAB_012 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(255)
+  CAMPO_3     String? @db.VarChar(30)
+  CAMPO_4     String? @db.VarChar(10)
+  CAMPO_5     String? @db.VarChar(255)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(10)
+  CAMPO_8     String? @db.VarChar(3)
+  CAMPO_9     String? @db.VarChar(100)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_012, CACHE_CD], map: "PK_TAB_012", clustered: false)
+}
+
+model TAB_014 {
+  COD_TAB_014 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(50)
+  CAMPO_3     String? @db.VarChar(150)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+  CAMPO_5     String? @db.VarChar(50)
+
+  @@id([COD_TAB_014, CACHE_CD], map: "PK_TAB_014", clustered: false)
+}
+
+model TAB_016 {
+  COD_TAB_016 Int
+  CAMPO_1     String? @db.VarChar(100)
+  CAMPO_2     String? @db.VarChar(150)
+  CAMPO_3     String? @db.VarChar(10)
+  CAMPO_4     String? @db.VarChar(10)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(15)
+  CAMPO_8     String? @db.VarChar(200)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_016, CACHE_CD], map: "PK_TAB_016", clustered: false)
+}
+
+model TAB_017 {
+  COD_TAB_017 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(20)
+  CAMPO_3     String? @db.VarChar(30)
+  CAMPO_4     String? @db.VarChar(30)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(15)
+  CAMPO_8     String? @db.VarChar(200)
+  CAMPO_9     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_017, CACHE_CD], map: "PK_TAB_017", clustered: false)
+}
+
+model TAB_018 {
+  COD_TAB_018 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(200)
+  CAMPO_3     String? @db.VarChar(2)
+  CAMPO_4     String? @db.VarChar(4)
+  CAMPO_5     String? @db.VarChar(10)
+  CAMPO_6     String? @db.VarChar(6)
+  CAMPO_7     String? @db.VarChar(15)
+  CAMPO_8     String? @db.VarChar(200)
+  CAMPO_9     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_018, CACHE_CD], map: "PK_TAB_018", clustered: false)
+}
+
+model TAB_019 {
+  COD_TAB_019 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(15)
+  CAMPO_4     String? @db.VarChar(20)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(200)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(10)
+  CAMPO_9     String? @db.VarChar(150)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_019, CACHE_CD], map: "PK_TAB_019", clustered: false)
+}
+
+model TAB_020 {
+  COD_TAB_020 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(15)
+  CAMPO_4     String? @db.VarChar(20)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(200)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(10)
+  CAMPO_9     String? @db.VarChar(150)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_020, CACHE_CD], map: "PK_TAB_020", clustered: false)
+}
+
+model TAB_021 {
+  COD_TAB_021 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(50)
+  CAMPO_3     String? @db.VarChar(50)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(200)
+  CAMPO_6     String? @db.VarChar(10)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+  CAMPO_9     String? @db.VarChar(50)
+
+  @@id([COD_TAB_021, CACHE_CD], map: "PK_TAB_021", clustered: false)
+}
+
+model TAB_022 {
+  COD_TAB_022 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(255)
+  CAMPO_3     String? @db.VarChar(30)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(20)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(10)
+  CAMPO_9     String? @db.VarChar(100)
+  CAMPO_10    String? @db.VarChar(200)
+  CAMPO_11    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_022, CACHE_CD], map: "PK_TAB_022", clustered: false)
+}
+
+model TAB_023 {
+  COD_TAB_023 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(150)
+  CAMPO_4     String? @db.VarChar(150)
+  CAMPO_5     String? @db.VarChar(255)
+  CAMPO_6     String? @db.VarChar(200)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(20)
+  CAMPO_9     String? @db.VarChar(255)
+  CAMPO_10    String? @db.VarChar(100)
+  CAMPO_11    String? @db.VarChar(100)
+  CAMPO_12    String? @db.VarChar(10)
+  CAMPO_13    String? @db.VarChar(200)
+  CAMPO_14    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+  CAMPO_15    String  @default("", map: "DF_TAB_023_CAMPO_15") @db.VarChar(50)
+
+  @@id([COD_TAB_023, CACHE_CD], map: "PK_TAB_023", clustered: false)
+}
+
+model TAB_024 {
+  COD_TAB_024 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(50)
+  CAMPO_3     String? @db.VarChar(150)
+  CAMPO_4     String? @db.VarChar(50)
+  CAMPO_5     String? @db.VarChar(20)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(10)
+  CAMPO_8     String? @db.VarChar(200)
+  CAMPO_9     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_024, CACHE_CD], map: "PK_TAB_024", clustered: false)
+}
+
+model TAB_025 {
+  COD_TAB_025 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(255)
+  CAMPO_3     String? @db.VarChar(10)
+  CAMPO_4     String? @db.VarChar(20)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(10)
+  CAMPO_8     String? @db.VarChar(200)
+  CAMPO_9     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_025, CACHE_CD], map: "PK_TAB_025", clustered: false)
+}
+
+model TAB_026 {
+  COD_TAB_026 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(100)
+  CAMPO_4     String? @db.VarChar(150)
+  CAMPO_5     String? @db.VarChar(150)
+  CAMPO_6     String? @db.VarChar(255)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMPO_8     String? @db.VarChar(200)
+  CAMPO_9     String? @db.VarChar(6)
+  CAMPO_10    String? @db.VarChar(10)
+  CAMPO_11    String? @db.VarChar(200)
+  CAMPO_12    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+  CAMPO_13    String? @db.VarChar(50)
+
+  @@id([COD_TAB_026, CACHE_CD], map: "PK_TAB_026", clustered: false)
+}
+
+model TAB_027 {
+  COD_TAB_027 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(10)
+  CAMPO_3     String? @db.VarChar(20)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(10)
+  CAMPO_7     String? @db.VarChar(200)
+  CAMPO_8     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_027, CACHE_CD], map: "PK_TAB_027", clustered: false)
+}
+
+model TAB_028 {
+  COD_TAB_028 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(200)
+  CAMPO_3     String? @db.VarChar(10)
+  CAMPO_4     String? @db.VarChar(20)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(10)
+  CAMPO_8     String? @db.VarChar(200)
+  CAMPO_9     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+  CAMPO_10    String? @db.VarChar(50)
+
+  @@id([COD_TAB_028, CACHE_CD], map: "PK_TAB_028", clustered: false)
+}
+
+model TAB_029 {
+  COD_TAB_029 Int
+  CAMPO_1     String? @db.VarChar(200)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(100)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(10)
+  CAMPO_7     String? @db.VarChar(200)
+  CAMPO_8     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_029, CACHE_CD], map: "PK_TAB_029", clustered: false)
+}
+
+model TAB_030 {
+  COD_TAB_030 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(50)
+  CAMPO_3     String? @db.VarChar(10)
+  CAMPO_4     String? @db.VarChar(50)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(20)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(100)
+  CAMPO_9     String? @db.VarChar(10)
+  CAMPO_10    String? @db.VarChar(200)
+  CAMPO_11    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_030, CACHE_CD], map: "PK_TAB_030", clustered: false)
+}
+
+model TAB_031 {
+  COD_TAB_031 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(255)
+  CAMPO_5     String? @db.VarChar(150)
+  CAMPO_6     String? @db.VarChar(150)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMPO_8     String? @db.VarChar(200)
+  CAMPO_9     String? @db.VarChar(100)
+  CAMPO_10    String? @db.VarChar(10)
+  CAMPO_11    String? @db.VarChar(200)
+  CAMPO_12    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_031, CACHE_CD], map: "PK_TAB_031", clustered: false)
+}
+
+model TAB_032 {
+  COD_TAB_032 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(20)
+  CAMPO_3     String? @db.VarChar(100)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(10)
+  CAMPO_6     String? @db.VarChar(200)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_032, CACHE_CD], map: "PK_TAB_032", clustered: false)
+}
+
+model TAB_033 {
+  COD_TAB_033 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(200)
+  CAMPO_3     String? @db.VarChar(200)
+  CAMPO_4     String? @db.VarChar(200)
+  CAMPO_5     String? @db.VarChar(200)
+  CAMPO_6     String? @db.VarChar(255)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(100)
+  CAMPO_9     String? @db.VarChar(10)
+  CAMPO_10    String? @db.VarChar(200)
+  CAMPO_11    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_033, CACHE_CD], map: "PK_TAB_033", clustered: false)
+}
+
+model TAB_034 {
+  COD_TAB_034 Int
+  CAMPO_1     String? @db.VarChar(10)
+  CAMPO_2     String? @db.VarChar(20)
+  CAMPO_3     String? @db.VarChar(100)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(15)
+  CAMPO_6     String? @db.VarChar(200)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_034, CACHE_CD], map: "PK_TAB_034", clustered: false)
+}
+
+model TAB_036 {
+  COD_TAB_036 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(10)
+  CAMPO_3     String? @db.VarChar(20)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(10)
+  CAMPO_7     String? @db.VarChar(200)
+  CAMPO_8     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_036, CACHE_CD], map: "PK_TAB_036", clustered: false)
+}
+
+model TAB_037 {
+  COD_TAB_037 Int
+  CAMPO_1     String? @db.VarChar(20)
+  CAMPO_2     String? @db.VarChar(255)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(255)
+  CAMPO_5     String? @db.VarChar(200)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(10)
+  CAMPO_9     String? @db.VarChar(200)
+  CAMPO_10    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_037, CACHE_CD], map: "PK_TAB_037", clustered: false)
+}
+
+model TAB_038 {
+  COD_TAB_038 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(10)
+  CAMPO_3     String? @db.VarChar(20)
+  CAMPO_4     String? @db.VarChar(200)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(10)
+  CAMPO_7     String? @db.VarChar(200)
+  CAMPO_8     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_038, CACHE_CD], map: "PK_TAB_038", clustered: false)
+}
+
+model TAB_039 {
+  COD_TAB_039 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(150)
+  CAMPO_4     String? @db.VarChar(150)
+  CAMPO_5     String? @db.VarChar(255)
+  CAMPO_6     String? @db.VarChar(10)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMPO_8     String? @db.VarChar(100)
+  CAMPO_9     String? @db.VarChar(100)
+  CAMPO_10    String? @db.VarChar(10)
+  CAMPO_11    String? @db.VarChar(200)
+  CAMPO_12    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_039, CACHE_CD], map: "PK_TAB_039", clustered: false)
+}
+
+model TAB_040 {
+  COD_TAB_040 Int
+  CAMPO_1     String? @db.VarChar(100)
+  CAMPO_2     String? @db.VarChar(255)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(150)
+  CAMPO_8     String? @db.VarChar(150)
+  CAMPO_9     String? @db.VarChar(255)
+  CAMPO_10    String? @db.VarChar(255)
+  CAMPO_11    String? @db.VarChar(255)
+  CAMPO_12    String? @db.VarChar(100)
+  CAMPO_13    String? @db.VarChar(100)
+  CAMPO_14    String? @db.VarChar(10)
+  CAMPO_15    String? @db.VarChar(200)
+  CAMPO_16    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_040, CACHE_CD], map: "PK_TAB_040", clustered: false)
+}
+
+model TAB_041 {
+  COD_TAB_041 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(150)
+  CAMPO_4     String? @db.VarChar(150)
+  CAMPO_5     String? @db.VarChar(255)
+  CAMPO_6     String? @db.VarChar(255)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMPO_8     String? @db.VarChar(100)
+  CAMPO_9     String? @db.VarChar(100)
+  CAMPO_10    String? @db.VarChar(10)
+  CAMPO_11    String? @db.VarChar(200)
+  CAMPO_12    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_041, CACHE_CD], map: "PK_TAB_041", clustered: false)
+}
+
+model TAB_042 {
+  COD_TAB_042 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(150)
+  CAMPO_3     String? @db.VarChar(100)
+  CAMPO_4     String? @db.VarChar(255)
+  CAMPO_5     String? @db.VarChar(255)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(10)
+  CAMPO_9     String? @db.VarChar(200)
+  CAMPO_10    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_042, CACHE_CD], map: "PK_TAB_042", clustered: false)
+}
+
+model TAB_043 {
+  COD_TAB_043 Int
+  CAMPO_1     String? @db.VarChar(200)
+  CAMPO_2     String? @db.VarChar(255)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(40)
+  CAMPO_5     String? @db.VarChar(255)
+  CAMPO_6     String? @db.VarChar(10)
+  CAMPO_7     String? @db.VarChar(10)
+  CAMPO_8     String? @db.VarChar(100)
+  CAMPO_9     String? @db.VarChar(100)
+  CAMPO_10    String? @db.VarChar(10)
+  CAMPO_11    String? @db.VarChar(200)
+  CAMPO_12    String? @db.VarChar(255)
+  CAMPO_13    String? @db.VarChar(100)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_043, CACHE_CD], map: "PK_TAB_043", clustered: false)
+}
+
+model TAB_044 {
+  COD_TAB_044 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(200)
+  CAMPO_3     String? @db.VarChar(200)
+  CAMPO_4     String? @db.VarChar(200)
+  CAMPO_5     String? @db.VarChar(255)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(10)
+  CAMPO_9     String? @db.VarChar(200)
+  CAMPO_10    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_044, CACHE_CD], map: "PK_TAB_044", clustered: false)
+}
+
+model TAB_045 {
+  COD_TAB_045 Int
+  CAMPO_1     String? @db.VarChar(10)
+  CAMPO_2     String? @db.VarChar(20)
+  CAMPO_3     String? @db.VarChar(100)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(15)
+  CAMPO_6     String? @db.VarChar(200)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_045, CACHE_CD], map: "PK_TAB_045", clustered: false)
+}
+
+model TAB_046 {
+  COD_TAB_046 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(100)
+  CAMPO_4     String? @db.VarChar(30)
+  CAMPO_5     String? @db.VarChar(30)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(10)
+  CAMPO_9     String? @db.VarChar(200)
+  CAMPO_10    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_046, CACHE_CD], map: "PK_TAB_046", clustered: false)
+}
+
+model TAB_047 {
+  COD_TAB_047 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(150)
+  CAMPO_6     String? @db.VarChar(150)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMPO_8     String? @db.VarChar(255)
+  CAMPO_9     String? @db.VarChar(200)
+  CAMPO_10    String? @db.VarChar(100)
+  CAMPO_11    String? @db.VarChar(10)
+  CAMPO_12    String? @db.VarChar(6)
+  CAMPO_13    String? @db.VarChar(200)
+  CAMPO_14    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_047, CACHE_CD], map: "PK_TAB_047", clustered: false)
+}
+
+model TAB_048 {
+  COD_TAB_048 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(150)
+  CAMPO_4     String? @db.VarChar(150)
+  CAMPO_5     String? @db.VarChar(255)
+  CAMPO_6     String? @db.VarChar(255)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMPO_8     String? @db.VarChar(100)
+  CAMPO_9     String? @db.VarChar(100)
+  CAMPO_10    String? @db.VarChar(10)
+  CAMPO_11    String? @db.VarChar(200)
+  CAMPO_12    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_048, CACHE_CD], map: "PK_TAB_048", clustered: false)
+}
+
+model TAB_050 {
+  COD_TAB_050 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(10)
+  CAMPO_3     String? @db.VarChar(20)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(10)
+  CAMPO_7     String? @db.VarChar(200)
+  CAMPO_8     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_050, CACHE_CD], map: "PK_TAB_050", clustered: false)
+}
+
+model TAB_051 {
+  COD_TAB_051 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(255)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(255)
+  CAMPO_6     String? @db.VarChar(255)
+  CAMPO_7     String? @db.VarChar(150)
+  CAMPO_8     String? @db.VarChar(150)
+  CAMPO_9     String? @db.VarChar(255)
+  CAMPO_10    String? @db.VarChar(100)
+  CAMPO_11    String? @db.VarChar(100)
+  CAMPO_12    String? @db.VarChar(10)
+  CAMPO_13    String? @db.VarChar(200)
+  CAMPO_14    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_051, CACHE_CD], map: "PK_TAB_051", clustered: false)
+}
+
+model TAB_052 {
+  COD_TAB_052 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(10)
+  CAMPO_5     String? @db.VarChar(255)
+  CAMPO_6     String? @db.VarChar(150)
+  CAMPO_7     String? @db.VarChar(150)
+  CAMPO_8     String? @db.VarChar(255)
+  CAMPO_9     String? @db.VarChar(200)
+  CAMPO_10    String? @db.VarChar(100)
+  CAMPO_11    String? @db.VarChar(10)
+  CAMPO_12    String? @db.VarChar(200)
+  CAMPO_13    String? @db.VarChar(255)
+  CAMPO_14    String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_052, CACHE_CD], map: "PK_TAB_052", clustered: false)
+}
+
+model TAB_053 {
+  COD_TAB_053 Int
+  CAMPO_1     String? @db.VarChar(100)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(10)
+  CAMPO_4     String? @db.VarChar(255)
+  CAMPO_5     String? @db.VarChar(150)
+  CAMPO_6     String? @db.VarChar(150)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMPO_8     String? @db.VarChar(100)
+  CAMPO_9     String? @db.VarChar(100)
+  CAMPO_10    String? @db.VarChar(10)
+  CAMPO_11    String? @db.VarChar(150)
+  CAMPO_12    String? @db.VarChar(255)
+  CAMPO_13    String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_053, CACHE_CD], map: "PK_TAB_053", clustered: false)
+}
+
+model TAB_054 {
+  COD_TAB_054 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(200)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(10)
+  CAMPO_6     String? @db.VarChar(255)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(100)
+  CAMPO_9     String? @db.VarChar(10)
+  CAMPO_10    String? @db.VarChar(200)
+  CAMPO_11    String? @db.VarChar(255)
+  CAMPO_12    String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_054, CACHE_CD], map: "PK_TAB_054", clustered: false)
+}
+
+model TAB_055 {
+  COD_TAB_055 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(150)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(255)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(10)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMPO_8     String? @db.VarChar(150)
+  CAMPO_9     String? @db.VarChar(150)
+  CAMPO_10    String? @db.VarChar(255)
+  CAMPO_11    String? @db.VarChar(100)
+  CAMPO_12    String? @db.VarChar(100)
+  CAMPO_13    String? @db.VarChar(10)
+  CAMPO_14    String? @db.VarChar(200)
+  CAMPO_15    String? @db.VarChar(255)
+  CAMPO_16    String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_055, CACHE_CD], map: "PK_TAB_055", clustered: false)
+}
+
+model TAB_056 {
+  COD_TAB_056 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(15)
+  CAMPO_4     String? @db.VarChar(20)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(200)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(10)
+  CAMPO_9     String? @db.VarChar(150)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_056, CACHE_CD], map: "PK_TAB_056", clustered: false)
+}
+
+model TAB_057 {
+  COD_TAB_057 Int
+  CAMPO_1     String? @db.VarChar(100)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(40)
+  CAMPO_4     String? @db.VarChar(255)
+  CAMPO_5     String? @db.VarChar(150)
+  CAMPO_6     String? @db.VarChar(150)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMPO_8     String? @db.VarChar(100)
+  CAMPO_9     String? @db.VarChar(100)
+  CAMPO_10    String? @db.VarChar(10)
+  CAMPO_11    String? @db.VarChar(150)
+  CAMPO_12    String? @db.VarChar(255)
+  CAMPO_13    String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_057, CACHE_CD], map: "PK_TAB_057", clustered: false)
+}
+
+model TAB_058 {
+  COD_TAB_058 Int
+  CAMPO_1     String? @db.VarChar(100)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(150)
+  CAMPO_4     String? @db.VarChar(150)
+  CAMPO_5     String? @db.VarChar(255)
+  CAMPO_6     String? @db.VarChar(10)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMPO_8     String? @db.VarChar(100)
+  CAMPO_9     String? @db.VarChar(100)
+  CAMPO_10    String? @db.VarChar(10)
+  CAMPO_11    String? @db.VarChar(150)
+  CAMPO_12    String? @db.VarChar(255)
+  CAMPO_13    String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_058, CACHE_CD], map: "PK_TAB_058", clustered: false)
+}
+
+model TAB_059 {
+  COD_TAB_059 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(255)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMPO_8     String? @db.VarChar(150)
+  CAMPO_9     String? @db.VarChar(150)
+  CAMPO_10    String? @db.VarChar(255)
+  CAMPO_11    String? @db.VarChar(10)
+  CAMPO_12    String? @db.VarChar(255)
+  CAMPO_13    String? @db.VarChar(100)
+  CAMPO_14    String? @db.VarChar(100)
+  CAMPO_15    String? @db.VarChar(10)
+  CAMPO_16    String? @db.VarChar(200)
+  CAMPO_17    String? @db.VarChar(255)
+  CAMPO_18    String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_059, CACHE_CD], map: "PK_TAB_059", clustered: false)
+}
+
+model TAB_060 {
+  COD_TAB_060 Int
+  CAMPO_1     String? @db.VarChar(100)
+  CAMPO_2     String? @db.VarChar(255)
+  CAMPO_3     String? @db.VarChar(10)
+  CAMPO_4     String? @db.VarChar(255)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(150)
+  CAMPO_7     String? @db.VarChar(10)
+  CAMPO_8     String? @db.VarChar(100)
+  CAMPO_9     String? @db.VarChar(255)
+  CAMPO_10    String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_060, CACHE_CD], map: "PK_TAB_060", clustered: false)
+}
+
+model TAB_061 {
+  COD_TAB_061 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(255)
+  CAMPO_3     String? @db.VarChar(40)
+  CAMPO_4     String? @db.VarChar(255)
+  CAMPO_5     String? @db.VarChar(100)
+  CAMPO_6     String? @db.VarChar(150)
+  CAMPO_7     String? @db.VarChar(10)
+  CAMPO_8     String? @db.VarChar(15)
+  CAMPO_9     String? @db.VarChar(255)
+  CAMPO_10    String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_061, CACHE_CD], map: "PK_TAB_061", clustered: false)
+}
+
+model TAB_062 {
+  COD_TAB_062 Int
+  CAMPO_1     String? @db.VarChar(10)
+  CAMPO_2     String? @db.VarChar(10)
+  CAMPO_3     String? @db.VarChar(100)
+  CAMPO_4     String? @db.VarChar(150)
+  CAMPO_5     String? @db.VarChar(10)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(255)
+  CAMPO_8     String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_062, CACHE_CD], map: "PK_TAB_062", clustered: false)
+}
+
+model TAB_063 {
+  COD_TAB_063 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(255)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(15)
+  CAMPO_6     String? @db.VarChar(255)
+  CAMPO_7     String? @db.VarChar(100)
+  CAMPO_8     String? @db.VarChar(200)
+  CAMPO_9     String? @db.VarChar(50)
+  CAMPO_10    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_063, CACHE_CD], map: "PK_TAB_063", clustered: false)
+}
+
+model TAB_064 {
+  COD_TAB_064 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(10)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(15)
+  CAMPO_6     String? @db.VarChar(255)
+  CAMPO_7     String? @db.VarChar(150)
+  CAMPO_8     String? @db.VarChar(200)
+  CAMPO_9     String? @db.VarChar(50)
+  CAMPO_10    String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_064, CACHE_CD], map: "PK_TAB_064", clustered: false)
+}
+
+model TAB_065 {
+  COD_TAB_065 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(255)
+  CAMPO_3     String? @db.VarChar(10)
+  CAMPO_4     String? @db.VarChar(15)
+  CAMPO_5     String? @db.VarChar(255)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(10)
+  CAMPO_8     String? @db.VarChar(6)
+  CAMPO_9     String? @db.VarChar(150)
+  CAMPO_10    String? @db.VarChar(255)
+  CAMPO_11    String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_065, CACHE_CD], map: "PK_TAB_065", clustered: false)
+}
+
+model TAB_066 {
+  COD_TAB_066 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(100)
+  CAMPO_3     String? @db.VarChar(100)
+  CAMPO_4     String? @db.VarChar(50)
+  CAMPO_5     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_066, CACHE_CD], map: "PK_TAB_066", clustered: false)
+}
+
+model TAB_067 {
+  COD_TAB_067 Int
+  CAMPO_1     String? @db.VarChar(150)
+  CAMPO_2     String? @db.VarChar(200)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(5)
+  CAMPO_6     String? @db.VarChar(100)
+  CAMPO_7     String? @db.VarChar(50)
+  CAMPO_8     String? @db.VarChar(255)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_067, CACHE_CD], map: "PK_TAB_067", clustered: false)
+}
+
+model TAB_068 {
+  COD_TAB_068 Int
+  CAMPO_1     String? @db.VarChar(50)
+  CAMPO_2     String? @db.VarChar(255)
+  CAMPO_3     String? @db.VarChar(100)
+  CAMPO_4     String? @db.VarChar(50)
+  CAMPO_5     String? @db.VarChar(5)
+  CAMPO_6     String? @db.VarChar(150)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_068, CACHE_CD], map: "PK_TAB_068", clustered: false)
+}
+
+model TAB_069 {
+  COD_TAB_069 Int
+  CAMPO_1     String? @db.VarChar(20)
+  CAMPO_2     String? @db.VarChar(200)
+  CAMPO_3     String? @db.VarChar(10)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(50)
+  CAMPO_6     String? @db.VarChar(5)
+  CAMPO_7     String? @db.VarChar(150)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_069, CACHE_CD], map: "PK_TAB_069", clustered: false)
+}
+
+model TAB_070 {
+  COD_TAB_070 Int
+  CAMPO_1     String? @db.VarChar(20)
+  CAMPO_2     String? @db.VarChar(200)
+  CAMPO_3     String? @db.VarChar(10)
+  CAMPO_4     String? @db.VarChar(100)
+  CAMPO_5     String? @db.VarChar(50)
+  CAMPO_6     String? @db.VarChar(5)
+  CAMPO_7     String? @db.VarChar(150)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_070, CACHE_CD], map: "PK_TAB_070", clustered: false)
+}
+
+model TAB_071 {
+  COD_TAB_071 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(20)
+  CAMPO_3     String? @db.VarChar(150)
+  CAMPO_4     String? @db.VarChar(255)
+  CAMPO_5     String? @db.VarChar(150)
+  CAMPO_6     String? @db.VarChar(200)
+  CAMPO_7     String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_071, CACHE_CD], map: "PK_TAB_071", clustered: false)
+}
+
+model TAB_072 {
+  COD_TAB_072 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(20)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(255)
+  CAMPO_5     String? @db.VarChar(150)
+  CAMPO_6     String? @db.VarChar(200)
+  CAMPO_7     String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_072, CACHE_CD], map: "PK_TAB_072", clustered: false)
+}
+
+model TAB_073 {
+  COD_TAB_073 Int
+  CAMPO_1     String? @db.VarChar(255)
+  CAMPO_2     String? @db.VarChar(20)
+  CAMPO_3     String? @db.VarChar(255)
+  CAMPO_4     String? @db.VarChar(255)
+  CAMPO_5     String? @db.VarChar(150)
+  CAMPO_6     String? @db.VarChar(200)
+  CAMPO_7     String? @db.VarChar(50)
+  CAMINHO     String  @db.VarChar(100)
+  CACHE_CD    Int
+  NUM_PAG     Int
+  ESTADO_REG  Int
+
+  @@id([COD_TAB_073, CACHE_CD], map: "PK_TAB_073", clustered: false)
+}
+
+model USUARIO_APLICACAO {
+  COD_USUARIO Int
+  COD_APP     Int
+  COD_ACAO    Int
+
+  @@id([COD_USUARIO, COD_APP, COD_ACAO], map: "PK_USUARIO_APLICACAO", clustered: false)
+}
+
+model USUARIO_PERFIL {
+  COD_USUARIO Int
+  COD_PERFIL  Int
+
+  @@id([COD_USUARIO, COD_PERFIL], map: "PK_USUARIO_PERFIL", clustered: false)
+}
+
+model USUARIO_SISTEMA {
+  COD_USUARIO  Int       @id(map: "PK_USUARIO_SISTEMA") @default(autoincrement())
+  COD_PERFIL   Int?
+  NOME_USUARIO String?   @db.VarChar(50)
+  AREA         String?   @db.VarChar(30)
+  LOGIN        String?   @db.VarChar(20)
+  SENHA        String?   @db.VarChar(40)
+  E_MAIL       String?   @db.VarChar(50)
+  FIGURA       Int?
+  DTEXPIRA     DateTime? @db.DateTime
+}

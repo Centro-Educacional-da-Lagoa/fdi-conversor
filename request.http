@@ -1,0 +1,16 @@
+POST http://localhost:3000/documents/process
+Content-Type: application/json
+
+{
+  "TX_Pesquisa": "humaita",
+  "NM_Pasta": "2024-08-24 Documentos Alunos Humaitá"
+}
+
+###
+POST http://localhost:3000/documents/generate
+Content-Type: application/json
+
+{
+  "TX_Pesquisa": "ipanema",
+  "NM_Arquivo": "2024-08-30 Alunos Ipanema"
+}
